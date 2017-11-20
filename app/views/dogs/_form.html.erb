@@ -1,23 +1,30 @@
 <%= simple_form_for(@dog) do |f| %>
-  <%= f.error_notification %>
+<%= f.error_notification %>
 
-  <div class="form-inputs">
+<div class="form-inputs">
 
-    <%= f.input :name %>
+  <%= f.input :name %>
 
-    <%= f.association :breed %>
+  <%= f.association :breed %>
 
-    <%= f.association :vet %>
+  <%= f.association :vet %>
 
-    <%= f.input :weight %>
+  <%= f.input :weight %>
 
-    <%= f.input :dob %>
+  <%= f.input :dob %>
 
-    <%= f.input :in_daycare %>
+  <%= f.input :in_daycare %>
 
-  </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+  <%= f.simple_fields_for(:custodies) do |custody_fields| %>
+  <%= custody_fields.association :owner, collection: Owner.order(:last_name, :first_name) %>
+  <% if custody_fields.object.persisted? %>
+  <% custody_fields.input :_destroy, as: :boolean %>
+  <% end %>
+  <% end %>
+</div>
+
+<div class="form-actions">
+  <%= f.button :submit %>
+</div>
 <% end %>
